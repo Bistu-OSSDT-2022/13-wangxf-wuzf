@@ -5,10 +5,12 @@ import "tailwindcss/tailwind.css";
 
 import {
     Button,
-    Layout
+    Layout,
+    Space
 }from "ant-design-vue"
 const app = createApp(App);
 app
   .use(Layout)
   .use(Button)
+  .use(Space)
   .mount('#app');
