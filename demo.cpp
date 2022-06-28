@@ -10,7 +10,7 @@
 using namespace std;
 
 static int days = 1;
-
+					//音量	
 void goBegin();
 
 void train(int num);
@@ -316,6 +316,10 @@ static int allRestTime = 1;//
 
 static MUSIC music;//
 
+static int times = 0;
+
+static float volume = 0.5f;
+
 static int restTime = 1;//
 
 static bool choosed[3] = {false,false,false};//
@@ -584,6 +588,10 @@ void goSetting(){
 	PIMAGE bg = newimage();
 	getimage(bg, "设置.jpg"); 
 	putimage(0, 0, bg);
+	setfont(16, 0, "黑体");
+	xyprintf(20, 100, "P键增大音量，M键减小音量");
+	xyprintf(20, 115, "初始音量设置为50% 每次变化10%!");
+	xyprintf(20, 130, "按R变红  按Y变黄  按G变绿");
 	mouse_msg msg = {0};
 	for ( ; is_run(); delay_fps(30))
 	{
@@ -594,7 +602,53 @@ void goSetting(){
 		if((int)msg.is_down() && msg.x > 49 && msg.x < 225 && msg.y > 47 && msg.y < 110){
 		    goBegin();
 		}
+			while (kbmsg()) {
+				key_msg keyMsg = getkey();
+				if (keyMsg.msg != key_msg_down)
+					continue;
+
+				DWORD status = music.GetPlayStatus();
+				int key = keyMsg.key;
+				switch (key) {
+					
+					//更改颜色 每次变动10% 
+				case 'P':		//增加音量
+					if ((volume += 0.1f) >= 1)
+						volume = 1;
+					music.SetVolume(volume);
+					break;
+				case 'M':		//减小音量
+					if ((volume -= 0.1f) < 0)
+						volume = 0;
+					music.SetVolume(volume);
+					break;
+					
+					//更改颜色 				
+				case 'R':		//change Red
+					//choose_color=1;
+					setcolor(EGERGB(0xA8, 0, 0));
+					xyprintf(20, 100, "P键增大音量，M键减小音量");
+	xyprintf(20, 115, "初始音量设置为50% 每次变化10%!");
+	xyprintf(20, 130, "按R变红  按Y变黄  按G变绿");
+					break;
+				case 'Y':		//change Yellow
+					//choose_color=2;
+					setcolor(EGERGB(0xFC, 0xFC, 0x54));
+					xyprintf(20, 100, "P键增大音量，M键减小音量");
+	xyprintf(20, 115, "初始音量设置为50% 每次变化10%!");
+	xyprintf(20, 130, "按R变红  按Y变黄  按G变绿");
+					break;
+				case 'G':		//change Green
+					//choose_color=3;	
+					setcolor(EGERGB(0x0, 0xFF, 0x0));	
+					xyprintf(20, 100, "P键增大音量，M键减小音量");
+	xyprintf(20, 115, "初始音量设置为50% 每次变化10%!");
+	xyprintf(20, 130, "按R变红  按Y变黄  按G变绿");					
+					break;
+				}
+			}
 	}
+	
 }
 
 void rest(int num){
@@ -650,9 +704,16 @@ void goBegin(){
 	bool up = false;
 	setfillcolor(EGEARGB(0xFF, 0x1E, 0x90, 0xFF));
 	setfont(40, 0, "黑体");
+	
+	if(times++ == 0)
+	{
 	setcolor(EGERGB(0x0, 0xFF, 0x0));
+	 } 
+	
 	music.OpenFile("Copilot Strategic Sound、Music - The Drunken Whaler.mp3");
 	music.Play(0);
+		music.SetVolume(volume);
+
 	cleardevice();
 	PIMAGE keys_manage = newimage();
 	PIMAGE keys_exit = newimage();
@@ -665,8 +726,7 @@ void goBegin(){
 	getimage(keys_open, "keys_open.png");
 	getimage(keys_setting, "keys_setting.png");
 	mouse_msg msg = {0};
-	
-	
+
 	//帧数 
 	for( ;is_run() && run; delay_fps(30)){
 		while (mousemsg())
@@ -712,7 +772,10 @@ void goBegin(){
 		putimage_alphablend(NULL,keys_exit,800, 480+n, 0x80);
 		putimage_alphablend(NULL,keys_manage,800, 330+n, 0x80);
 		putimage_alphablend(NULL,keys_setting,500, 550+n, 0x80);
+		
 	}
+	
+	
 }
 
 void manageShow(int choosed,int xe,int ye){
@@ -739,6 +802,7 @@ void showProfit(){
 void goManage(){
 	music.OpenFile("橘麻美 - Vanquish.mp3");
 	music.Play(0);
+	music.SetVolume(volume);
 	int oneSecond = 0;
 	int oneSecond1 = 0;
 	srand((unsigned)time(NULL));
@@ -826,6 +890,9 @@ void goManage(){
 			choosed = 6;
 			manageShow(choosed,xe,ye);
 		}
+		
+		
+		//工作的四个定位 
 		if((int)msg.is_down() && msg.x > 947 && msg.x < 1003 && msg.y > 158 && msg.y < 158 + 137){
 			if(workCD == 0){
 				if(!memberList[3 * 0 + (choosed-1) % 3].getRest()){
@@ -840,6 +907,7 @@ void goManage(){
 				workCD++; 
 			}
 			showProfit();
+			manageShow(choosed,xe,ye);
 		}
 		if((int)msg.is_down() && msg.x >947 && msg.x < 1003 && msg.y > 158+137 && msg.y < 158 + 137 * 2){
 			if(workCD == 0){
@@ -855,6 +923,7 @@ void goManage(){
 				workCD++; 
 			}
 			showProfit();
+			manageShow(choosed,xe,ye);
 		}
 		if((int)msg.is_down() && msg.x > 947 && msg.x < 1003 && msg.y > 158+137 * 2 && msg.y < 158 + 137 * 3){
 			if(workCD == 0){
@@ -870,6 +939,7 @@ void goManage(){
 				workCD++; 
 			}
 			showProfit();
+			manageShow(choosed,xe,ye);
 		}
 		if((int)msg.is_down() && msg.x > 947 && msg.x < 1003 && msg.y > 158+137 * 3 && msg.y < 158 + 137 * 4){
 			if(workCD == 0){
@@ -885,6 +955,7 @@ void goManage(){
 				workCD++; 
 			}
 			showProfit();
+			manageShow(choosed,xe,ye);
 		}
 		if(oneSecond){
 			warning("该员工已经无法工作！");
@@ -970,6 +1041,7 @@ void showMember(int num){
 	xyprintf(95,645,"%.0f",150 + theOne.getDEX() * 50);
 	xyprintf(300,360,"%.2f",theOne.getDEX());
 	xyprintf(300,400,"%.2f",theOne.getSAN());
+	
 	xyprintf(300,440,"%.2f",theOne.getEMO());
 }
 
