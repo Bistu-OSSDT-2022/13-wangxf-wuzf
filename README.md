@@ -36,6 +36,9 @@
 # 管理团队：
 大摆钟组
 ***
+# 帮助文档：
+https://github.com/Bistu-OSSDT-2022/13-wangxf-wuzf.git
+***
 # 鸣谢：
 1. 指导教师：王衔飞
 2.  ui设计：中北大学 沈青衣
