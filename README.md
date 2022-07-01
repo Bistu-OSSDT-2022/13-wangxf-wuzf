@@ -23,7 +23,7 @@
 2. 提交修改的格式：请在修改代码后说明你修复的问题或新增的功能。
 ***
 # 版权：
-1. 代码内容采用GPL许可证。
+1. 代码内容采用MPL许可证。
 2. 文档内容采用署名-非商业性使用-禁止演绎4.0国际协议许可。
 ***
 # 开发人员:
@@ -71,9 +71,7 @@ This project is written entirely in C++ and is currently available in beta 1.0, 
 2. Pull request: Please explain the problems you have fixed or new features after modifying the code.
 ***
 # Copyright:
-The code content is licensed under the GPL.
-The content of the document is licensed under CC BY-NC-ND 4.0.
-1. The code content is licensed under the GPL.
+1. The code content is licensed under the MPL.
 2. The content of the document is licensed under CC BY-NC-ND 4.0.
 ***
 # Developers:
